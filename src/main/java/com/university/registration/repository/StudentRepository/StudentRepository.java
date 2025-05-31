@@ -13,6 +13,8 @@ public interface StudentRepository {
 
   void deleteStudent(Student student);
 
+  void deleteStudent(String matricula);
+
   List<Student> getAllStudents();
 
   Optional<Student> getStudentByMatricula(String matricula);

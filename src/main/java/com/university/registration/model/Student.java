@@ -7,11 +7,20 @@ public class Student extends Person {
   private LocalDateTime data_matricula = LocalDateTime.now();
   private NivelMatricula nivelMatricula = NivelMatricula.INDEFINIDO;
 
-  public Student(String matricula, LocalDateTime data_matricula, NivelMatricula nivelMatricula) {
-    super();
+  public Student(String matricula, String nome, Genders genero, LocalDateTime dataNascimento,
+      LocalDateTime data_matricula, NivelMatricula nivelMatricula) {
+    super(nome, dataNascimento, genero);
     this.matricula = matricula;
     this.data_matricula = data_matricula;
     this.nivelMatricula = nivelMatricula;
+  }
+
+  public Student(String nome, Genders genero, LocalDateTime dataNascimento, LocalDateTime data_matricula,
+      NivelMatricula nivelMatricula) {
+    super(nome, dataNascimento, genero);
+    this.data_matricula = data_matricula;
+    this.nivelMatricula = nivelMatricula;
+
   }
 
   public void setMatricula(String matricula) {

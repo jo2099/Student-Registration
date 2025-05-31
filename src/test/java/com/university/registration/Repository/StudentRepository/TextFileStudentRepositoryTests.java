@@ -34,10 +34,8 @@ class TextFileStudentRepositoryTests {
 
   @Test
   void testAddStudent() {
-    Student student = new Student("12345678", LocalDateTime.now(), NivelMatricula.GRADUACAO);
-    student.setName("João Silva");
-    student.setGender(Genders.HOMEM_CIS);
-    student.setDateTimeOfBirth(LocalDateTime.of(2000, 1, 1, 0, 0));
+    Student student = new Student("12345678", "João Silva", Genders.HOMEM_CIS, LocalDateTime.of(2000, 1, 1, 0, 0),
+        LocalDateTime.now(), NivelMatricula.GRADUACAO);
 
     repository.addStudent(student);
 
@@ -48,38 +46,45 @@ class TextFileStudentRepositoryTests {
 
   @Test
   void testAddExistingStudent() {
-    Student student = new Student("12345678", LocalDateTime.now(), NivelMatricula.GRADUACAO);
+    Student student = new Student("00000000", "João Silva", Genders.HOMEM_CIS, LocalDateTime.of(2000, 1, 1, 0, 0),
+        LocalDateTime.now(), NivelMatricula.GRADUACAO);
+    repository.addStudent(student);
+    repository.addStudent(student); // Tentar adicionar o mesmo aluno novamente
+
+    Optional<Student> savedStudent = repository.getStudentByMatricula("00000001");
+    assertTrue(savedStudent.isPresent());
+
+  }
+
+  @Test
+  void testDeleteStudentByMatricula() {
+    Student student = new Student("12345678", "João Silva", Genders.HOMEM_CIS, LocalDateTime.of(2000, 1, 1, 0, 0),
+        LocalDateTime.now(), NivelMatricula.GRADUACAO);
     student.setName("João Silva");
     student.setGender(Genders.HOMEM_CIS);
     student.setDateTimeOfBirth(LocalDateTime.of(2000, 1, 1, 0, 0));
     repository.addStudent(student);
-    // Tentar adicionar o mesmo aluno novamente
-    Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-      repository.addStudent(student);
-    });
-
-    // Verificar a mensagem da exceção
-    assertEquals("Aluno já existe no repositório.", exception.getMessage());
-
+    repository.deleteStudent("12345678");
+    Optional<Student> deletedStudent = repository.getStudentByMatricula("12345678");
+    assertFalse(deletedStudent.isPresent(), "O aluno não deve estar presente após a exclusão.");
   }
 
   @Test
   void testGetStudentByMatricula() {
-    Student student = new Student("87654321", LocalDateTime.now(), NivelMatricula.MESTRADO);
-    student.setName("Maria Oliveira");
-    student.setGender(Genders.MULHER_CIS);
-    student.setDateTimeOfBirth(LocalDateTime.of(1995, 5, 15, 0, 0));
+    Student student = new Student("12345678", "João Silva", Genders.HOMEM_CIS, LocalDateTime.of(2000, 1, 1, 0, 0),
+        LocalDateTime.now(), NivelMatricula.GRADUACAO);
 
     repository.addStudent(student);
 
-    Optional<Student> retrievedStudent = repository.getStudentByMatricula("87654321");
+    Optional<Student> retrievedStudent = repository.getStudentByMatricula("12345678");
     assertTrue(retrievedStudent.isPresent());
-    assertEquals("Maria Oliveira", retrievedStudent.get().getName());
+    assertEquals("João Silva", retrievedStudent.get().getName());
   }
 
   @Test
   void testUpdateStudent() {
-    Student student = new Student("12345678", LocalDateTime.now(), NivelMatricula.GRADUACAO);
+    Student student = new Student("12345678", "João Silva", Genders.HOMEM_CIS, LocalDateTime.of(2000, 1, 1, 0, 0),
+        LocalDateTime.now(), NivelMatricula.GRADUACAO);
     student.setName("João Silva");
     student.setGender(Genders.HOMEM_CIS);
     student.setDateTimeOfBirth(LocalDateTime.of(2000, 1, 1, 0, 0));
@@ -96,7 +101,8 @@ class TextFileStudentRepositoryTests {
 
   @Test
   void testDeleteStudent() {
-    Student student = new Student("12345678", LocalDateTime.now(), NivelMatricula.GRADUACAO);
+    Student student = new Student("12345678", "João Silva", Genders.HOMEM_CIS, LocalDateTime.of(2000, 1, 1, 0, 0),
+        LocalDateTime.now(), NivelMatricula.GRADUACAO);
     student.setName("João Silva");
     student.setGender(Genders.HOMEM_CIS);
     student.setDateTimeOfBirth(LocalDateTime.of(2000, 1, 1, 0, 0));
@@ -110,17 +116,19 @@ class TextFileStudentRepositoryTests {
 
   @Test
   void testGetAllStudents() {
-    Student student1 = new Student("12345678", LocalDateTime.now(), NivelMatricula.GRADUACAO);
-    student1.setName("João Silva");
-    student1.setGender(Genders.HOMEM_CIS);
-    student1.setDateTimeOfBirth(LocalDateTime.of(2000, 1, 1, 0, 0));
+    Student student = new Student("12345678", "João Silva", Genders.HOMEM_CIS, LocalDateTime.of(2000, 1, 1, 0, 0),
+        LocalDateTime.now(), NivelMatricula.GRADUACAO);
+    student.setName("João Silva");
+    student.setGender(Genders.HOMEM_CIS);
+    student.setDateTimeOfBirth(LocalDateTime.of(2000, 1, 1, 0, 0));
 
-    Student student2 = new Student("87654321", LocalDateTime.now(), NivelMatricula.MESTRADO);
+    Student student2 = new Student("87654321", "Lucas Silva", Genders.HOMEM_CIS, LocalDateTime.of(2000, 1, 1, 0, 0),
+        LocalDateTime.now(), NivelMatricula.MESTRADO);
     student2.setName("Maria Oliveira");
     student2.setGender(Genders.MULHER_CIS);
     student2.setDateTimeOfBirth(LocalDateTime.of(1995, 5, 15, 0, 0));
 
-    repository.addStudent(student1);
+    repository.addStudent(student);
     repository.addStudent(student2);
 
     List<Student> students = repository.getAllStudents();

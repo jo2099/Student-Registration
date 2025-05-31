@@ -7,7 +7,7 @@ abstract class Person {
   private LocalDateTime dateTimeOfBirth = LocalDateTime.now();
   private Genders gender = Genders.INDEFINIDO;
 
-  public Person(String name, LocalDateTime dateTimeOfBirth, Genders gender) throws InvalidNameException {
+  public Person(String name, LocalDateTime dateTimeOfBirth, Genders gender) {
     setName(name);
     setDateTimeOfBirth(dateTimeOfBirth);
     setGender(gender);

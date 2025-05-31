@@ -16,4 +16,14 @@ public enum Genders {
     }
     throw new IllegalArgumentException("Invalid gender: " + gender);
   }
+
+  public static String[] getAllValues() {
+    return new String[] {
+        INDEFINIDO.name(),
+        HOMEM_CIS.name(),
+        MULHER_CIS.name(),
+        NAO_BINARIO.name(),
+        TRANSGENERO.name()
+    };
+  }
 }
